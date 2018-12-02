@@ -49,11 +49,14 @@ double PutOption::PayOff(double S) {
 }
 
 
-int main() {
-    CallOption call1(0, 120, 120, 100, 10, 0.05, 0.01, 0.1);
-    cout << call1.Price() << endl;
-    PutOption put1(0, 0, 0, 100, 3, 0.05, 0.01, 0.1);
-    cout << put1.Price() << endl;
-    call1.MonteCarloPrice(10000);
-    cout << "Monte-Carlo Price is " << call1.price_mc_ << endl;
-}
+//int main() {
+//    CallOption call1(0, 120, 120, 100, 10, 0.05, 0.01, 0.1);
+//    cout << "Closed-form call option price is " << call1.Price() << endl;
+//    PutOption put1(0, 80, 80, 100, 3, 0.05, 0.01, 0.1);
+//    cout << "Closed-form put option price is " << put1.Price() << endl;
+//    call1.MonteCarloPrice(100);
+//    cout << "Monte-Carlo Price for call option is " << call1.price_mc_ << endl;
+//    put1.MonteCarloPrice(100);
+//    cout << "Monte-Carlo Price for put option is " << put1.price_mc_ << endl;
+//
+//}
