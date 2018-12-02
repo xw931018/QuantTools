@@ -1,7 +1,5 @@
-import VaRCVaR
+from VaRCVaR import VaR
 import numpy as np
-
-VaR = VaRCVaR.VaR
 
 def calculate1D(F, N, repeats=100, usingIS=False, Psi=None, alpha=0.95):
     print("Alpha is ", alpha, ",  Number of iterations: ", N, " Using IS method ? ", usingIS)
