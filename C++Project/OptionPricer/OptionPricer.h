@@ -3,7 +3,12 @@ class Option {
         virtual double PayOff(double S) = 0;
 
         double Price();
+
+        double interest_rate_;
         double price_;
+        double price_mc_;
+
+        void MonteCarloPrice(long N);
 };
 
 class VanillaOption: public Option {
@@ -16,7 +21,6 @@ class VanillaOption: public Option {
         double spot_;
         double strike_;
         double maturity_;
-        double interest_rate_;
         double dividend_;
         double vol_;
         double d1_;

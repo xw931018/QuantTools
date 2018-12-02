@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 #include "OptionPricer.h"
 
 using namespace std;
@@ -17,6 +18,14 @@ VanillaOption::VanillaOption(double t, double S, double K, double T, double r, d
 
 double VanillaOption::Price() {
     return price_;
+}
+
+void Option::MonteCarloPrice(int N) {
+    double sum = 0;
+    for (n = 0; n < N; n++) {
+
+    }
+
 }
 
 CallOption::CallOption(double t, double S, double K, double T, double r, double d, double sigma):
