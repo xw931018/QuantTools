@@ -1,5 +1,6 @@
 class Option {
     public:
+        Option(double t, double S0, double S, double K, double T, double r, double d, double sigma);
         virtual double PayOff(double S) = 0;
 
         double Price();
@@ -7,17 +8,8 @@ class Option {
         double interest_rate_;
         double price_;
         double price_mc_;
-
-        void MonteCarloPrice(long N);
-};
-
-class VanillaOption: public Option {
-    public:
-        VanillaOption(double t, double S, double K, double T, double r, double d, double sigma);
-        virtual double PayOff(double S) = 0;
-        double Price();
-
         double t_;
+        double spot_0_;
         double spot_;
         double strike_;
         double maturity_;
@@ -25,20 +17,22 @@ class VanillaOption: public Option {
         double vol_;
         double d1_;
         double d2_;
+
+        void MonteCarloPrice(long N);
 };
 
-class CallOption: public VanillaOption {
+class CallOption: public Option {
     public:
-        CallOption(double t, double S, double K, double T, double r, double d, double sigma);
+        CallOption(double t, double S0, double S, double K, double T, double r, double d, double sigma);
         double PayOff(double S);
 
     private:
         int option_price_;
 };
 
-class PutOption: public VanillaOption {
+class PutOption: public Option {
     public:
-        PutOption(double t, double S, double K, double T, double r, double d, double sigma);
+        PutOption(double t, double S0, double S, double K, double T, double r, double d, double sigma);
         double PayOff(double S);
 
     private:

@@ -2,34 +2,35 @@
 #include <cmath>
 #include <algorithm>
 #include "OptionPricer.h"
+#include "../Utils.h"
 
 using namespace std;
 
-double normalCFD(double value)
-{
- return 0.5 * erfc(-value * M_SQRT1_2);
-}
-
-VanillaOption::VanillaOption(double t, double S, double K, double T, double r, double d, double sigma):
-    t_(t), spot_(S), strike_(K), maturity_(T), interest_rate_(r), dividend_(d), vol_(sigma) {
+Option::Option(double t, double S0, double S, double K, double T, double r, double d, double sigma):
+    t_(t), spot_0_(S0), spot_(S), strike_(K), maturity_(T), dividend_(d), vol_(sigma) {
+    interest_rate_ = r;
     d1_ = (log(S/K) + (r - d + sigma*sigma/2)*(T-t))/sigma/sqrt(T-t);
     d2_ = (log(S/K) + (r - d - sigma*sigma/2)*(T-t))/sigma/sqrt(T-t);
     }
 
-double VanillaOption::Price() {
+double Option::Price() {
     return price_;
 }
 
-void Option::MonteCarloPrice(int N) {
-    double sum = 0;
-    for (n = 0; n < N; n++) {
-
+void Option::MonteCarloPrice(long N) {
+    double sum    = 0;
+    double payOff = 0;
+    double s      = 0;
+    for (long n = 0; n < N; n++) {
+        s = stockPrice(spot_0_, t_, maturity_, interest_rate_, dividend_, vol_);
+        payOff = PayOff(s);
+        sum += payOff * exp(-interest_rate_*(maturity_-t_));
     }
-
+    price_mc_ = sum/N;
 }
 
-CallOption::CallOption(double t, double S, double K, double T, double r, double d, double sigma):
-    VanillaOption(t, S, K, T, r, d, sigma) {
+CallOption::CallOption(double t, double S0, double S, double K, double T, double r, double d, double sigma):
+    Option(t, S0, S, K, T, r, d, sigma) {
         price_ = S*exp(-d*(T-t))*normalCFD(d1_) - K*exp(-r*(T-t))*normalCFD(d2_);
     }
 
@@ -37,8 +38,8 @@ double CallOption::PayOff(double S) {
     return std::max(S - strike_, 0.0);
 }
 
-PutOption::PutOption(double t, double S, double K, double T, double r, double d, double sigma):
-    VanillaOption(t, S, K, T, r, d, sigma) {
+PutOption::PutOption(double t, double S0, double S, double K, double T, double r, double d, double sigma):
+    Option(t, S0, S, K, T, r, d, sigma) {
         price_ = K*exp(-r*(T-t))*normalCFD(-d2_) - S*exp(-d*(T-t))*normalCFD(-d1_);
 
     }
@@ -49,8 +50,10 @@ double PutOption::PayOff(double S) {
 
 
 int main() {
-    CallOption call1(0, 50, 100, 3, 0.05, 0.01, 0.1);
+    CallOption call1(0, 120, 120, 100, 10, 0.05, 0.01, 0.1);
     cout << call1.Price() << endl;
-    PutOption put1(0, 0, 100, 3, 0.05, 0.01, 0.1);
+    PutOption put1(0, 0, 0, 100, 3, 0.05, 0.01, 0.1);
     cout << put1.Price() << endl;
+    call1.MonteCarloPrice(10000);
+    cout << "Monte-Carlo Price is " << call1.price_mc_ << endl;
 }
