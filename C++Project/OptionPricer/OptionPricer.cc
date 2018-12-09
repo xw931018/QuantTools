@@ -13,7 +13,7 @@ Option::Option(double t, double S0, double S, double K, double T, double r, doub
     d2_ = (log(S/K) + (r - d - sigma*sigma/2)*(T-t))/sigma/sqrt(T-t);
     }
 
-double Option::Price() {
+const double& Option::Price() const {
     return price_;
 }
 
@@ -34,7 +34,7 @@ CallOption::CallOption(double t, double S0, double S, double K, double T, double
         price_ = S*exp(-d*(T-t))*normalCFD(d1_) - K*exp(-r*(T-t))*normalCFD(d2_);
     }
 
-double CallOption::PayOff(double S) {
+double CallOption::PayOff(const double &S) const{
     return std::max(S - strike_, 0.0);
 }
 
@@ -44,19 +44,19 @@ PutOption::PutOption(double t, double S0, double S, double K, double T, double r
 
     }
 
-double PutOption::PayOff(double S) {
+double PutOption::PayOff(const double& S) const {
     return std::max(strike_ - S, 0.0);
 }
 
 
-//int main() {
-//    CallOption call1(0, 120, 120, 100, 10, 0.05, 0.01, 0.1);
-//    cout << "Closed-form call option price is " << call1.Price() << endl;
-//    PutOption put1(0, 80, 80, 100, 3, 0.05, 0.01, 0.1);
-//    cout << "Closed-form put option price is " << put1.Price() << endl;
-//    call1.MonteCarloPrice(100);
-//    cout << "Monte-Carlo Price for call option is " << call1.price_mc_ << endl;
-//    put1.MonteCarloPrice(100);
-//    cout << "Monte-Carlo Price for put option is " << put1.price_mc_ << endl;
-//
-//}
+int main() {
+    CallOption call1(0, 120, 120, 100, 10, 0.05, 0.01, 0.1);
+    cout << "Closed-form call option price is " << call1.Price() << endl;
+    PutOption put1(0, 80, 80, 100, 3, 0.05, 0.01, 0.1);
+    cout << "Closed-form put option price is " << put1.Price() << endl;
+    call1.MonteCarloPrice(100);
+    cout << "Monte-Carlo Price for call option is " << call1.price_mc_ << endl;
+    put1.MonteCarloPrice(100);
+    cout << "Monte-Carlo Price for put option is " << put1.price_mc_ << endl;
+
+}

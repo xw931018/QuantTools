@@ -1,9 +1,9 @@
 class Option {
     public:
         Option(double t, double S0, double S, double K, double T, double r, double d, double sigma);
-        virtual double PayOff(double S) = 0;
+        virtual double PayOff(const double& S) const = 0;
 
-        double Price();
+        const double& Price() const;
 
         double interest_rate_;
         double price_;
@@ -24,7 +24,7 @@ class Option {
 class CallOption: public Option {
     public:
         CallOption(double t, double S0, double S, double K, double T, double r, double d, double sigma);
-        double PayOff(double S);
+        double PayOff(const double& S) const;
 
     private:
         int option_price_;
@@ -33,7 +33,7 @@ class CallOption: public Option {
 class PutOption: public Option {
     public:
         PutOption(double t, double S0, double S, double K, double T, double r, double d, double sigma);
-        double PayOff(double S);
+        double PayOff(const double& S) const;
 
     private:
         int option_price_;
