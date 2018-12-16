@@ -1,10 +1,11 @@
+#include <functional>
 
 class NonlinearSolver {
     public:
-        double (*myFunc) (double);
+        std::function<double(double)> myFunc;
         double tol;
 
-        NonlinearSolver(double (*function)(double));
+        NonlinearSolver(std::function<double(double)> f);
         virtual double solve() = 0;
         virtual double solve(double, double, long) = 0;
 };
@@ -16,7 +17,7 @@ class SteffensenSolver : public NonlinearSolver {
         void   setParams(double, double, long);
 
     public:
-        SteffensenSolver(double (*function)(double), double);
+        SteffensenSolver(std::function<double(double)> f, double);
         double solve();
         double solve(double, double, long);
 
