@@ -2,6 +2,7 @@ class Option {
     public:
         Option(double t, double S0, double S, double K, double T, double r, double d, double sigma);
         virtual double PayOff(const double& S) const = 0;
+        virtual double ImpliedVolFitter(double, double) = 0;
 
         const double& Price() const;
 
@@ -15,6 +16,7 @@ class Option {
         double maturity_;
         double dividend_;
         double vol_;
+        double vol_implied_;
         double d1_;
         double d2_;
 
@@ -25,6 +27,7 @@ class CallOption: public Option {
     public:
         CallOption(double t, double S0, double S, double K, double T, double r, double d, double sigma);
         double PayOff(const double& S) const;
+        double ImpliedVolFitter(double, double);
 
     private:
         int option_price_;
@@ -34,6 +37,7 @@ class PutOption: public Option {
     public:
         PutOption(double t, double S0, double S, double K, double T, double r, double d, double sigma);
         double PayOff(const double& S) const;
+        double ImpliedVolFitter(double, double);
 
     private:
         int option_price_;
