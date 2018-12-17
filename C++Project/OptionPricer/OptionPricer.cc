@@ -97,11 +97,12 @@ double PutOption::PayOff(const double& S) const {
 int main() {
     CallOption call1(0, 59, 59, 60, 0.25, 0.067, 0.067, 0.1);
     cout << "Closed-form call option price is " << call1.Price() << endl;
-    PutOption put1(0, 80, 80, 100, 3, 0.05, 0.01, 0.1);
+    PutOption put1(0, 59, 59, 60, 0.25, 0.067, 0.067, 0.1);
     cout << "Closed-form put option price is " << put1.Price() << endl;
-    call1.MonteCarloPrice(100);
+    call1.MonteCarloPrice(10000);
     cout << "Monte-Carlo Price for call option is " << call1.price_mc_ << endl;
-    put1.MonteCarloPrice(100);
+    put1.MonteCarloPrice(10000);
     cout << "Monte-Carlo Price for put option is " << put1.price_mc_ << endl;
-    cout << "Test implied volatility fitter " << call1.ImpliedVolFitter(0.74, 0.3) << endl;
+    cout << "Test call implied volatility fitter " << call1.ImpliedVolFitter(4, 0.22) << endl;
+    cout << "Test put implied volatility fitter " << put1.ImpliedVolFitter(5, 0.44) << endl;
 }
