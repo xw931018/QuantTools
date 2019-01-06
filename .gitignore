@@ -50,3 +50,6 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+
+# Database config files
+DataBase/config.py

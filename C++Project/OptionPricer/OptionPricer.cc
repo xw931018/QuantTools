@@ -7,6 +7,17 @@
 
 using namespace std;
 
+Option::Option() {
+    interest_rate_ = 0;
+    t_ = 0;
+    spot_ = 100;
+    spot_0_ = 100;
+    strike_ = 120;
+    maturity_ = 1;
+    dividend_ = 0;
+    vol_ = 0.2;
+}
+
 Option::Option(double t, double S0, double S, double K, double T, double r, double d, double sigma):
     t_(t), spot_0_(S0), spot_(S), strike_(K), maturity_(T), dividend_(d), vol_(sigma) {
     interest_rate_ = r;
@@ -28,6 +39,9 @@ void Option::MonteCarloPrice(long N) {
         sum += payOff * exp(-interest_rate_*(maturity_-t_));
     }
     price_mc_ = sum/N;
+}
+
+CallOption::CallOption() : Option() {
 }
 
 CallOption::CallOption(double t, double S0, double S, double K, double T, double r, double d, double sigma):
@@ -59,6 +73,8 @@ double CallOption::ImpliedVolFitter(double CallPrice, double initial) {
     double impVol = solver.solve();
     return impVol;
 }
+
+PutOption::PutOption() : Option() {}
 
 PutOption::PutOption(double t, double S0, double S, double K, double T, double r, double d, double sigma):
     Option(t, S0, S, K, T, r, d, sigma) {
@@ -105,4 +121,14 @@ int main() {
     cout << "Monte-Carlo Price for put option is " << put1.price_mc_ << endl;
     cout << "Test call implied volatility fitter " << call1.ImpliedVolFitter(4, 0.22) << endl;
     cout << "Test put implied volatility fitter " << put1.ImpliedVolFitter(5, 0.44) << endl;
+    CallOption C1;
+    Option* C2 = &C1; //new PutOption();
+    const type_info& typeC1 = typeid(C1);
+    cout << "Human readable type " << typeC1.name() << endl;
+    if (typeid(C1) == typeid(*C2)) {
+        cout << "Type ID Equal ! " <<  endl;
+    } else {
+        cout << "Not Equal" << typeid(C2).name() << endl;
+    }
+
 }

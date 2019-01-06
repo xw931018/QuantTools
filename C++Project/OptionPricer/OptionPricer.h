@@ -1,5 +1,6 @@
 class Option {
     public:
+        Option();
         Option(double t, double S0, double S, double K, double T, double r, double d, double sigma);
         virtual double PayOff(const double& S) const = 0;
         virtual double ImpliedVolFitter(double, double) = 0;
@@ -23,8 +24,10 @@ class Option {
         void MonteCarloPrice(long N);
 };
 
+
 class CallOption: public Option {
     public:
+        CallOption();
         CallOption(double t, double S0, double S, double K, double T, double r, double d, double sigma);
         double PayOff(const double& S) const;
         double ImpliedVolFitter(double, double);
@@ -35,6 +38,7 @@ class CallOption: public Option {
 
 class PutOption: public Option {
     public:
+        PutOption();
         PutOption(double t, double S0, double S, double K, double T, double r, double d, double sigma);
         double PayOff(const double& S) const;
         double ImpliedVolFitter(double, double);
