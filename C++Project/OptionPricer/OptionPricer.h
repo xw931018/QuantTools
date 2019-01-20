@@ -1,9 +1,18 @@
+#include "PayOff.h"
+#include <vector>
+
+using namespace std;
+
 class Option {
+    protected:
+        PayOff* payoff;
+
     public:
-        Option();
-        Option(double t, double S0, double S, double K, double T, double r, double d, double sigma);
-        virtual double PayOff(const double& S) const = 0;
-        virtual double ImpliedVolFitter(double, double) = 0;
+        Option() {};
+        Option(PayOff*);
+        virtual ~Option() {};
+        void SetParameters(double t, double S, double T, double r, double d, double sigma);
+        virtual double ClosedFormPriceVanilla(double t, double S, double T, double r, double d, double sigma);
 
         const double& Price() const;
 
@@ -11,7 +20,6 @@ class Option {
         double price_;
         double price_mc_;
         double t_;
-        double spot_0_;
         double spot_;
         double strike_;
         double maturity_;
@@ -21,30 +29,31 @@ class Option {
         double d1_;
         double d2_;
 
-        void MonteCarloPrice(long N);
+        double MonteCarloPrice(const vector<double>& stock_prices);
 };
 
 
 class CallOption: public Option {
     public:
-        CallOption();
-        CallOption(double t, double S0, double S, double K, double T, double r, double d, double sigma);
-        double PayOff(const double& S) const;
-        double ImpliedVolFitter(double, double);
+        CallOption() {};
+        CallOption(PayOff* payoff);
+        virtual ~CallOption() {};
+        virtual double ClosedFormPriceVanilla(double t, double S, double T, double r, double d, double sigma);
+        double ImpliedVolFitter(double CallPrice, double initial, double t, double S, double T, double r, double d);
 };
 
 class PutOption: public Option {
     public:
-        PutOption();
-        PutOption(double t, double S0, double S, double K, double T, double r, double d, double sigma);
-        double PayOff(const double& S) const;
-        double ImpliedVolFitter(double, double);
+        PutOption() {};
+        PutOption(PayOff* payoff);
+        virtual ~PutOption() {};
+        virtual double ClosedFormPriceVanilla(double t, double S, double T, double r, double d, double sigma);
+        double ImpliedVolFitter(double CallPrice, double initial, double t, double S, double T, double r, double d);
 };
 
 class DigitalOption: public Option {
     public:
-        DigitalOption();
-        DigitalOption(double t, double S0, double S, double K, double T, double r, double d, double sigma);
-        double PayOff(const double& S) const;
-        double ImpliedVolFitter(double, double);
+        DigitalOption() {};
+        DigitalOption(PayOff* payoff);
+        virtual ~DigitalOption() {};
 };
