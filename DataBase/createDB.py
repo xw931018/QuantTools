@@ -266,6 +266,6 @@ def main():
 
     print(MASTER_LIST_FAILED_SYMBOLS)
 
-
+# Data is saved
 # if __name__ == '__main__':
 #     main()

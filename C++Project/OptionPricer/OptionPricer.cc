@@ -81,6 +81,8 @@ PutOption::PutOption(double t, double S0, double S, double K, double T, double r
         price_ = K*exp(-r*(T-t))*normalCFD(-d2_) - S*exp(-d*(T-t))*normalCFD(-d1_);
     }
 
+
+
 double PutOption::ImpliedVolFitter(double PutPrice, double initial) {
     double S = spot_;
     double K = strike_;
@@ -107,11 +109,32 @@ double PutOption::PayOff(const double& S) const {
     return std::max(strike_ - S, 0.0);
 }
 
+DigitalOption::DigitalOption() : Option() {}
 
+DigitalOption::DigitalOption(double t, double S0, double S, double K, double T, double r, double d, double sigma):
+    Option(t, S0, S, K, T, r, d, sigma) {
+}
 
+double DigitalOption::PayOff(double const& S) const {
+    if (S >= strike_) {
+        return 1.0;
+    } else {
+        return 0;
+    }
+}
+
+double DigitalOption::ImpliedVolFitter(double DigitalPrice, double initial) {
+    return vol_;
+}
 
 int main() {
     CallOption call1(0, 59, 59, 60, 0.25, 0.067, 0.067, 0.1);
+    DigitalOption digital(0, 60, 59, 60, 0.25, 0.067, 0.067, 0.1);
+
+    digital.MonteCarloPrice(10000);
+
+    cout << "Digital Option call price is " << digital.price_mc_ << endl;
+
     cout << "Closed-form call option price is " << call1.Price() << endl;
     PutOption put1(0, 59, 59, 60, 0.25, 0.067, 0.067, 0.1);
     cout << "Closed-form put option price is " << put1.Price() << endl;

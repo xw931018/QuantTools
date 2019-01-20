@@ -31,9 +31,6 @@ class CallOption: public Option {
         CallOption(double t, double S0, double S, double K, double T, double r, double d, double sigma);
         double PayOff(const double& S) const;
         double ImpliedVolFitter(double, double);
-
-    private:
-        int option_price_;
 };
 
 class PutOption: public Option {
@@ -42,7 +39,12 @@ class PutOption: public Option {
         PutOption(double t, double S0, double S, double K, double T, double r, double d, double sigma);
         double PayOff(const double& S) const;
         double ImpliedVolFitter(double, double);
+};
 
-    private:
-        int option_price_;
+class DigitalOption: public Option {
+    public:
+        DigitalOption();
+        DigitalOption(double t, double S0, double S, double K, double T, double r, double d, double sigma);
+        double PayOff(const double& S) const;
+        double ImpliedVolFitter(double, double);
 };
