@@ -86,7 +86,6 @@ double PutOption::ImpliedVolFitter(double PutPrice, double initial, double t, do
     return impVol;
 }
 
-
 DigitalOption::DigitalOption(PayOff* payoff):
     Option(payoff) {}
 
@@ -96,16 +95,18 @@ int main() {
     PayOffPut * payPut  = new PayOffPut(60);
     CallOption call(payCall);
     PutOption  put(payPut);
+    GeometricBrownianPrice Spot(59, 0, 0.25, 0.067, 0.067, 0.1);
+    vector<double> prices = Spot(100000);
 
     cout << "Call Closed Form: " << call.ClosedFormPriceVanilla(0, 59, 0.25, 0.067, 0.067, 0.1) << endl;
     cout << "Put Closed Form: " << put.ClosedFormPriceVanilla(0, 59, 0.25, 0.067, 0.067, 0.1) << endl;
 
-    vector<double> prices(100, 0) ;
     cout << "Call Monte Carlo Price: " << call.MonteCarloPrice(prices) << endl;
-    cout << "Put Monte Carlo Price: " << call.MonteCarloPrice(prices) << endl;
+    cout << "Put Monte Carlo Price: " << put.MonteCarloPrice(prices) << endl;
 
     cout << "Test call implied volatility fitter " << call.ImpliedVolFitter(4, 0.22, 0, 59, 0.25, 0.067, 0.067) << endl;
     cout << "Test put implied volatility fitter " << put.ImpliedVolFitter(4, 0.44, 0, 59, 0.25, 0.067, 0.067) << endl;
+
 
     delete payCall;
     delete payPut;
