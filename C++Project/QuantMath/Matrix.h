@@ -23,6 +23,8 @@ class Matrix {
         // Return const element whenn there is no value assignment
         const T& operator()(const unsigned& row, const unsigned& col) const;
 
+        void PrintMatrix() const;
+
         Matrix<T>& operator=(const Matrix<T>& rhs); // Overriding assignment operator
         Matrix<T> operator+(const Matrix<T>& rhs); // Overriding addition operator with a matrix
         Matrix<T> operator+(const T& scalar);      // Overriding addition operator with a scalar value
@@ -43,5 +45,7 @@ class Matrix {
 
         Matrix<T> operator/(const T& scalar);
         Matrix<T>& operator/=(const T& scalar);
+
+        Matrix<T> transpose();
 
 };

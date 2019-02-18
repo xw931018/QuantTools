@@ -201,6 +201,26 @@ Matrix<T>& Matrix<T>::operator/=(const T& scalar) {
     return *this;
 }
 
+template<typename T>
+Matrix<T> Matrix<T>::transpose() {
+    Matrix<T> result(cols_, rows_, 0);
+    for (unsigned i = 0; i < cols_; i++)
+        for (unsigned j = 0; j < rows_; j++) {
+            result(i, j) = matrix_[j][i];
+        }
+    return result;
+}
+
+template<typename T>
+void Matrix<T>::PrintMatrix() const {
+    for (unsigned i = 0; i < rows_; i++) {
+        for (unsigned j = 0; j < cols_; j++) {
+            cout << matrix_[i][j] << ' ';
+        }
+        cout << endl;
+    }
+}
+
 int main() {
     //Test matrix constructor;
     Matrix<double> mat(10, 3, 5.5);
@@ -223,4 +243,5 @@ int main() {
     Matrix<double> mat4(3, 7, 3.333);
     Matrix<double> mat5 = mat3 * mat4;
     cout << mat5.Rows() << ' ' << mat5.Cols() << ' ' << mat5(2, 5) << endl;
+    mat5.PrintMatrix();
 }
