@@ -1,1 +1,1 @@
-g++ -std=c++11 OptionPricer.cc ../Utils.cc ../NonlinearSolver/NonlinearSolver.cc && ./a.out
+g++ -std=c++11 OptionPricer.cc PayOff.cc ../Utils.cc ../NonlinearSolver/NonlinearSolver.cc && ./a.out
