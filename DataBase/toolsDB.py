@@ -3,7 +3,7 @@
 # @Time    : 2019/1/7 01:14
 # @Author  : wxiong
 # @Site    : 
-# @File    : createDB.py.py
+# @File    : toolsDB.py
 # @Desc    : Create postgresql database to store financial data created by wxiong
 
 import psycopg2
@@ -24,8 +24,8 @@ DB_KWARGS = {'db_host': ConfigDB.HOST.value,
              'db_password': ConfigDB.PASSWORD.value,
              'db_name': ConfigDB.DB.value}
 
-def check_db_exists(db_host = ConfigDB.HOST, db_user = ConfigDB.USER,
-                    db_password = ConfigDB.PASSWORD, db_name = ConfigDB.DB):
+def check_db_exists(db_host = ConfigDB.HOST.value, db_user = ConfigDB.USER.value,
+                    db_password = ConfigDB.PASSWORD.value, db_name = ConfigDB.DB.value):
     try:
         conn = psycopg2.connect(host = db_host,
                                 database = db_name,
