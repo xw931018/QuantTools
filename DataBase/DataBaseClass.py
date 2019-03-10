@@ -76,7 +76,10 @@ class DataBase():
                 '''.format(name = tableDict['tableName'],
                            fields = ','.join([' '.join(field)
                                               for field in tableDict['fields']]))
-        self.execute(query)
+        try:
+            self.execute(query)
+        except Exception as e:
+            logger.info('Table {} already exist'.format(tableDict['tableName']), e)
 
     def createTables(self, tableDictList):
         for tableDict in tableDictList:
