@@ -23,6 +23,8 @@ class DataBase():
         self.db_password = kwargs.pop('db_password', '')
         self.new_db  = kwargs.pop('new_db', False)
         self.reconfig(**kwargs)
+
+    def connect(self):
         try:
             conn = psycopg2.connect(host = self.db_host,
                                     database = self.db_name,
@@ -32,7 +34,7 @@ class DataBase():
             self.connection = conn
             self.cursor = conn.cursor()
         except Exception as e:
-            logger.error('DB {db_name} does not exist: {err_msg}'.format(db_name = self.db_name), err_msg = e)
+            logger.error('DB {db_name} does not exist: {err_msg}'.format(db_name = self.db_name, err_msg = e))
             if self.new_db:
                 logger.info('Creating new database {db_name}'.format(db_name = self.db_name))
                 conn = psycopg2.connect(host = self.db_host,
@@ -50,6 +52,8 @@ class DataBase():
                                         password=self.db_password)
                 self.connection = conn
                 self.cursor = conn.cursor()
+                logger.info('DB {db_name} created successfully'.format(db_name=self.db_name))
+            pass
 
     def reconfig(self, **kwargs):
         for k, v in kwargs.items():
@@ -57,8 +61,10 @@ class DataBase():
 
     def __del__(self):
         logger.info('[Delete] Closing connection and cursor...')
-        self.connection.close()
-        self.cursor.close()
+        if hasattr(self, 'cursor'):
+            self.cursor.close()
+        if hasattr(self, 'connection'):
+            self.connection.close()
 
     def getConn(self):
         return self.connection
@@ -79,10 +85,25 @@ class DataBase():
         try:
             self.execute(query)
         except Exception as e:
-            logger.info('Table {} already exist'.format(tableDict['tableName']), e)
+            logger.info('Error while creating table {}'.format(tableDict['tableName']), e)
 
     def createTables(self, tableDictList):
         for tableDict in tableDictList:
             self.createTable(tableDict)
 
+    def insertTable(self, df, table_name):
+        fields = list(df)
+        values = 'VALUES ({})'.format(','.join(['%s' for _ in fields]))
+        insert_query = 'INSERT INTO {table} ({fields}) {values}'.format(table = table_name,
+                                                                        fields = ', '.join(fields),
+                                                                        values = values)
+        df_list = df.values.tolist()
+        df_tuples = [tuple(x) for x in df_list]
+        self.cursor.executemany(insert_query, df_tuples)
+        logger.info('Insert into table {} completed'.format(table_name))
 
+    def getAllFromTable(self, table_name):
+        # query = 'SELECT * FROM {}'.format(table_name)
+        # self.cursor.query(query)
+        # res_list = self.cursor.fetchall()
+        return pd.read_sql_query('select * from "{}"'.format(table_name), con = self.connection)
